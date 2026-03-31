@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:anseonggold.co.kr)",
+      "Bash(curl -k -L --max-time 15 http://anseonggold.co.kr/)",
+      "Bash(npx:*)",
+      "Bash(yes \"\")"
+    ]
+  }
+}
