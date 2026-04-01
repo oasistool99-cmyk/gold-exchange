@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Category, Post } from "@/lib/types";
 import { slugify } from "@/lib/utils";
-import { Save, Eye, Upload, X, Sparkles } from "lucide-react";
+import { Save, Eye, Upload, X, Sparkles, Wand2, Loader2 } from "lucide-react";
 
 interface PostEditorProps {
   post?: Post;
@@ -18,6 +18,12 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [generatingContent, setGeneratingContent] = useState(false);
+
+  // AI 글 생성 입력
+  const [perspective, setPerspective] = useState("");
+  const [summary, setSummary] = useState("");
+  const [charCount, setCharCount] = useState(2000);
 
   const [title, setTitle] = useState(post?.title || "");
   const [slug, setSlug] = useState(post?.slug || "");
@@ -97,6 +103,45 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
     }
   }
 
+  async function handleGenerateContent() {
+    if (!perspective || !summary) {
+      setError("주요 관점과 요약을 입력해주세요.");
+      return;
+    }
+    setError("");
+    setGeneratingContent(true);
+
+    const categoryName = categories.find((c) => c.id === categoryId)?.name || "";
+
+    try {
+      const res = await fetch("/api/admin/generate-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          perspective,
+          summary,
+          charCount,
+          category: categoryName,
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "AI 글 생성 실패");
+        return;
+      }
+
+      if (data.title) setTitle(data.title);
+      if (data.content) setContent(data.content);
+      if (data.excerpt) setExcerpt(data.excerpt);
+      if (data.tags?.length) setTagsInput(data.tags.join(", "));
+    } catch {
+      setError("AI 글 생성 중 오류가 발생했습니다.");
+    } finally {
+      setGeneratingContent(false);
+    }
+  }
+
   async function handleSave(pub?: boolean) {
     setError("");
     setSaving(true);
@@ -149,6 +194,79 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
           {error}
         </div>
       )}
+
+      {/* AI 글 생성 섹션 */}
+      <div className="bg-gradient-to-r from-purple-900/30 to-gold/10 border border-purple-500/30 rounded-xl p-5 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Wand2 size={20} className="text-purple-400" />
+          <h3 className="text-base font-semibold text-white">AI 글 자동 생성</h3>
+          <span className="text-[11px] text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded-full">GPT-4o</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="block text-xs text-text-muted mb-1">주요 관점 *</label>
+            <input
+              type="text"
+              value={perspective}
+              onChange={(e) => setPerspective(e.target.value)}
+              placeholder="예: 2024년 하반기 금 투자 전망"
+              className="w-full bg-dark border border-dark-border rounded-lg px-3 py-2.5 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-purple-400"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-text-muted mb-1">목표 글자 수</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={charCount}
+                onChange={(e) => setCharCount(Number(e.target.value) || 2000)}
+                min={500}
+                max={10000}
+                step={500}
+                className="w-full bg-dark border border-dark-border rounded-lg px-3 py-2.5 text-sm text-text focus:outline-none focus:border-purple-400"
+              />
+              <span className="text-xs text-text-muted shrink-0">자</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-xs text-text-muted mb-1">요약 / 핵심 내용 *</label>
+          <textarea
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="글에 담고 싶은 핵심 내용을 간략히 설명해주세요. 예: 최근 국제 금 시세 상승 추세와 안성 지역 금 매입/매도 시 유의할 점, 한국금거래소 안성공도점의 차별화된 서비스 소개"
+            rows={3}
+            className="w-full bg-dark border border-dark-border rounded-xl px-3 py-2.5 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-purple-400 resize-none"
+          />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleGenerateContent}
+            disabled={generatingContent || !perspective || !summary}
+            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:from-purple-500 hover:to-purple-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {generatingContent ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                AI가 글을 작성하고 있습니다...
+              </>
+            ) : (
+              <>
+                <Wand2 size={16} />
+                AI 글 생성
+              </>
+            )}
+          </button>
+          {generatingContent && (
+            <span className="text-[11px] text-purple-300 animate-pulse">
+              약 15~30초 소요됩니다
+            </span>
+          )}
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
         {/* 메인 편집 영역 */}
