@@ -8,7 +8,7 @@ export default function Footer() {
           {/* 브랜드 */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.svg" alt="한국금거래소" className="h-10" />
+              <img src="/logo.png" alt="한국금거래소" className="h-10" />
               <span className="text-text-muted text-xs">안성공도점</span>
             </div>
             <p className="text-sm text-text-muted leading-relaxed">

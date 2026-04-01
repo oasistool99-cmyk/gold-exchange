@@ -52,7 +52,7 @@ export default function Header() {
       {/* 메인 헤더 */}
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <img src="/logo.svg" alt="한국금거래소" className="h-10 md:h-12" />
+          <img src="/logo.png" alt="한국금거래소" className="h-10 md:h-12" />
           <span className="text-text-muted text-xs">안성공도점</span>
         </Link>
 
