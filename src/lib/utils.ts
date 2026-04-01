@@ -7,12 +7,18 @@ export function formatDate(dateStr: string): string {
 }
 
 export function slugify(text: string): string {
-  return text
+  const base = text
     .toLowerCase()
-    .replace(/[^a-z0-9가-힣\s-]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .trim();
+
+  // 영문/숫자가 없으면 타임스탬프 기반 slug 생성
+  if (!base) {
+    return `post-${Date.now()}`;
+  }
+  return base;
 }
 
 export function excerpt(content: string, maxLength = 150): string {
