@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Category, Post } from "@/lib/types";
 import { slugify } from "@/lib/utils";
-import { Save, Eye, Upload, X, Sparkles, Wand2, Loader2 } from "lucide-react";
+import { Save, Eye, Upload, X, Sparkles, Wand2, Loader2, Copy, ExternalLink, CheckCircle } from "lucide-react";
 
 interface PostEditorProps {
   post?: Post;
@@ -25,6 +25,13 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
   const [summary, setSummary] = useState("");
   const [charCount, setCharCount] = useState(2000);
 
+  // 외부 블로그 발행
+  const [syncTistory, setSyncTistory] = useState(false);
+  const [syncBlogger, setSyncBlogger] = useState(false);
+  const [tistoryReady, setTistoryReady] = useState(false);
+  const [bloggerReady, setBloggerReady] = useState(false);
+  const [copied, setCopied] = useState("");
+
   const [title, setTitle] = useState(post?.title || "");
   const [slug, setSlug] = useState(post?.slug || "");
   const [content, setContent] = useState(post?.content || "");
@@ -39,6 +46,16 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
     fetch("/api/admin/categories")
       .then((r) => r.json())
       .then((d) => setCategories(d.categories || []))
+      .catch(() => {});
+
+    // 외부 블로그 설정 확인
+    fetch("/api/admin/settings")
+      .then((r) => r.json())
+      .then((d) => {
+        const s = d.settings || {};
+        setTistoryReady(!!(s.tistory_access_token && s.tistory_blog_name));
+        setBloggerReady(!!(s.blogger_api_key && s.blogger_blog_id));
+      })
       .catch(() => {});
   }, []);
 
@@ -160,6 +177,10 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
       category_id: categoryId || null,
       tags,
       published: pub !== undefined ? pub : published,
+      sync_external: {
+        tistory: syncTistory,
+        blogger: syncBlogger,
+      },
     };
 
     try {
@@ -431,6 +452,74 @@ export default function PostEditor({ post, isEdit }: PostEditorProps) {
                 className="w-full bg-dark border border-dark-border rounded-lg px-3 py-1.5 text-xs text-text-muted focus:outline-none focus:border-gold"
               />
             </div>
+          </div>
+
+          {/* 외부 블로그 발행 */}
+          <div className="bg-dark-card border border-dark-border rounded-xl p-4">
+            <h3 className="text-sm font-semibold text-gold mb-3">외부 블로그</h3>
+
+            <div className="space-y-2 mb-3">
+              <label className={`flex items-center gap-2 ${tistoryReady ? "cursor-pointer" : "opacity-40 cursor-not-allowed"}`}>
+                <input
+                  type="checkbox"
+                  checked={syncTistory}
+                  onChange={(e) => setSyncTistory(e.target.checked)}
+                  disabled={!tistoryReady}
+                  className="accent-orange-500"
+                />
+                <span className="text-sm text-text">Tistory</span>
+                {!tistoryReady && <span className="text-[10px] text-text-muted">(설정 필요)</span>}
+              </label>
+
+              <label className={`flex items-center gap-2 ${bloggerReady ? "cursor-pointer" : "opacity-40 cursor-not-allowed"}`}>
+                <input
+                  type="checkbox"
+                  checked={syncBlogger}
+                  onChange={(e) => setSyncBlogger(e.target.checked)}
+                  disabled={!bloggerReady}
+                  className="accent-blue-500"
+                />
+                <span className="text-sm text-text">Blogger</span>
+                {!bloggerReady && <span className="text-[10px] text-text-muted">(설정 필요)</span>}
+              </label>
+            </div>
+
+            <div className="border-t border-dark-border pt-3 space-y-2">
+              <p className="text-[11px] text-text-muted mb-1">수동 등록용 복사</p>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${title}\n\n${content}`);
+                  setCopied("naver");
+                  setTimeout(() => setCopied(""), 2000);
+                  window.open("https://blog.naver.com/postwrite", "_blank");
+                }}
+                disabled={!content}
+                className="w-full flex items-center justify-center gap-1.5 bg-green-600/20 border border-green-600/30 text-green-400 text-xs py-2 rounded-lg hover:bg-green-600/30 transition disabled:opacity-50"
+              >
+                {copied === "naver" ? <><CheckCircle size={12} /> 복사됨!</> : <><Copy size={12} /> Naver 블로그용 복사</>}
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${title}\n\n${content}`);
+                  setCopied("brunch");
+                  setTimeout(() => setCopied(""), 2000);
+                  window.open("https://brunch.co.kr/write", "_blank");
+                }}
+                disabled={!content}
+                className="w-full flex items-center justify-center gap-1.5 bg-gray-600/20 border border-gray-600/30 text-gray-300 text-xs py-2 rounded-lg hover:bg-gray-600/30 transition disabled:opacity-50"
+              >
+                {copied === "brunch" ? <><CheckCircle size={12} /> 복사됨!</> : <><Copy size={12} /> Brunch용 복사</>}
+              </button>
+            </div>
+
+            {(!tistoryReady || !bloggerReady) && (
+              <a
+                href="/admin/settings"
+                className="inline-flex items-center gap-1 text-[11px] text-gold hover:underline mt-2"
+              >
+                <ExternalLink size={10} /> API 설정하기
+              </a>
+            )}
           </div>
         </div>
       </div>

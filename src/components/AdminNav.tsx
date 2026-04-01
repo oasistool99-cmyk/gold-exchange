@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FileText, FolderOpen, BarChart3, LogOut, Home } from "lucide-react";
+import { FileText, FolderOpen, BarChart3, LogOut, Home, Settings } from "lucide-react";
 
 export default function AdminNav() {
   const pathname = usePathname();
@@ -17,6 +17,7 @@ export default function AdminNav() {
     { href: "/admin/posts", label: "글 관리", icon: FileText },
     { href: "/admin/categories", label: "카테고리", icon: FolderOpen },
     { href: "/admin/analytics", label: "방문자 분석", icon: BarChart3 },
+    { href: "/admin/settings", label: "설정", icon: Settings },
   ];
 
   return (

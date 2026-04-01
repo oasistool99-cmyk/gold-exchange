@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase";
 import { verifyToken } from "@/lib/auth";
 import { syncToWordPress, shouldSyncToWP } from "@/lib/sync-wordpress";
+import { syncToExternalBlogs } from "@/lib/sync-external";
 
 // 글 목록 (관리자 - published/unpublished 모두)
 export async function GET(req: NextRequest) {
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
   if (!admin) return NextResponse.json({ error: "인증 필요" }, { status: 401 });
 
   const body = await req.json();
-  const { title, slug, content, excerpt, thumbnail_url, category_id, tags, published } = body;
+  const { title, slug, content, excerpt, thumbnail_url, category_id, tags, published, sync_external } = body;
 
   if (!title || !slug) {
     return NextResponse.json({ error: "제목과 슬러그는 필수입니다." }, { status: 400 });
@@ -78,6 +79,14 @@ export async function POST(req: NextRequest) {
       blog_post_id: data.id,
       action: "create",
     }).catch(() => {});
+  }
+
+  // 외부 블로그 동시 발행
+  if (published && sync_external && (sync_external.tistory || sync_external.blogger)) {
+    syncToExternalBlogs(
+      { title, content: content || "", tags: tags || [] },
+      { tistory: sync_external.tistory, blogger: sync_external.blogger }
+    ).catch(() => {});
   }
 
   return NextResponse.json({ post: data }, { status: 201 });

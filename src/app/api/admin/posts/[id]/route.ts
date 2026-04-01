@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase";
 import { verifyToken } from "@/lib/auth";
 import { syncToWordPress, shouldSyncToWP } from "@/lib/sync-wordpress";
+import { syncToExternalBlogs } from "@/lib/sync-external";
 
 // 글 상세
 export async function GET(
@@ -34,7 +35,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const { title, slug, content, excerpt, thumbnail_url, category_id, tags, published } = body;
+  const { title, slug, content, excerpt, thumbnail_url, category_id, tags, published, sync_external } = body;
 
   const db = getAdminClient();
   const { data, error } = await db
@@ -70,6 +71,14 @@ export async function PUT(
       blog_post_id: Number(id),
       action: "update",
     }).catch(() => {});
+  }
+
+  // 외부 블로그 동시 발행
+  if (published && sync_external && (sync_external.tistory || sync_external.blogger)) {
+    syncToExternalBlogs(
+      { title, content: content || "", tags: tags || [] },
+      { tistory: sync_external.tistory, blogger: sync_external.blogger }
+    ).catch(() => {});
   }
 
   return NextResponse.json({ post: data });
