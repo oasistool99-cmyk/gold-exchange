@@ -35,7 +35,7 @@ export default function Header() {
             <span>📍 경기도 안성시 공도읍 진건중길 4</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>⏰ 평일 10:00~19:00 | 토 10:00~17:00</span>
+            <span>⏰ 평일 10:30~19:30 | 토 10:30~19:30</span>
             {isAdmin && (
               <Link
                 href="/admin/posts"

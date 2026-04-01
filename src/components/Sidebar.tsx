@@ -49,7 +49,7 @@ export default function Sidebar({ categories, currentSlug }: SidebarProps) {
         <div className="space-y-2 text-sm text-text-muted">
           <p>📍 경기도 안성시 공도읍 진건중길 4</p>
           <p>📞 010-2645-3745</p>
-          <p>⏰ 평일 10:00~19:00</p>
+          <p>⏰ 평일 10:30~19:30</p>
           <a
             href="http://anseonggold.co.kr"
             target="_blank"

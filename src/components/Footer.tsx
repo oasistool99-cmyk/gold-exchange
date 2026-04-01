@@ -51,8 +51,8 @@ export default function Footer() {
                 📞 010-2645-3745
               </a>
               <span>📍 경기도 안성시 공도읍 진건중길 4</span>
-              <span>⏰ 평일 10:00~19:00</span>
-              <span>🔒 토요일 10:00~17:00</span>
+              <span>⏰ 평일 10:30~19:30</span>
+              <span>🔒 토요일 10:30~19:30</span>
               <a href="http://anseonggold.co.kr" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition">
                 🌐 anseonggold.co.kr
               </a>
