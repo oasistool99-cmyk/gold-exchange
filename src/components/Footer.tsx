@@ -7,16 +7,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* 브랜드 */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex flex-col items-center leading-none text-[9px] tracking-widest text-text-muted">
-                <span>KOREA</span>
-                <span className="text-gold font-bold text-[10px]">GOLD</span>
-                <span>EXCHANGE</span>
-              </div>
-              <div className="flex flex-col leading-tight">
-                <span className="text-gold font-bold font-serif">한국금거래소</span>
-                <span className="text-text-muted text-xs">안성공도점</span>
-              </div>
+            <div className="flex items-center gap-2 mb-4">
+              <img src="/logo.svg" alt="한국금거래소" className="h-10" />
+              <span className="text-text-muted text-xs">안성공도점</span>
             </div>
             <p className="text-sm text-text-muted leading-relaxed">
               안성에서 금, 은, 보석을 가장 정확한 시세로 거래하는 곳.

@@ -51,16 +51,9 @@ export default function Header() {
 
       {/* 메인 헤더 */}
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex flex-col items-center leading-none text-[10px] tracking-widest text-text-muted group-hover:text-gold transition">
-            <span>KOREA</span>
-            <span className="text-gold font-bold text-xs">GOLD</span>
-            <span>EXCHANGE</span>
-          </div>
-          <div className="flex flex-col leading-tight">
-            <span className="text-gold font-bold text-lg font-serif">한국금거래소</span>
-            <span className="text-text-muted text-xs">안성공도점</span>
-          </div>
+        <Link href="/" className="flex items-center gap-2 group">
+          <img src="/logo.svg" alt="한국금거래소" className="h-10 md:h-12" />
+          <span className="text-text-muted text-xs">안성공도점</span>
         </Link>
 
         {/* 데스크탑 네비게이션 */}
