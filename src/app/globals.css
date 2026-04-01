@@ -1,26 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gold: #D4AF37;
+  --gold-light: #E8C84A;
+  --gold-dark: #B8960C;
+  --dark: #1a1a1a;
+  --dark-bg: #111111;
+  --dark-card: #1e1e1e;
+  --dark-border: #2a2a2a;
+  --white: #ffffff;
+  --gray: #888888;
+  --gray-light: #aaaaaa;
+  --text: #e0e0e0;
+  --text-muted: #999999;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-dark: var(--dark);
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-card: var(--dark-card);
+  --color-dark-border: var(--dark-border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--dark-bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Noto Serif KR', serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold-dark);
+  border-radius: 4px;
+}
+
+/* Selection */
+::selection {
+  background: var(--gold);
+  color: var(--dark);
+}
+
+/* Prose (글 본문) */
+.prose {
+  color: var(--text);
+  line-height: 1.8;
+}
+.prose h2 {
+  color: var(--gold);
+  font-family: 'Noto Serif KR', serif;
+  margin-top: 2em;
+  margin-bottom: 0.8em;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.prose h3 {
+  color: var(--white);
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.prose p {
+  margin-bottom: 1.2em;
+}
+.prose img {
+  border-radius: 8px;
+  margin: 1.5em 0;
+}
+.prose a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+.prose blockquote {
+  border-left: 3px solid var(--gold);
+  padding-left: 1em;
+  color: var(--gray-light);
+  font-style: italic;
+}
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.2em;
+}
+.prose li {
+  margin-bottom: 0.4em;
+}
+.prose code {
+  background: var(--dark-card);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose pre {
+  background: var(--dark-card);
+  padding: 1em;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5em 0;
 }
