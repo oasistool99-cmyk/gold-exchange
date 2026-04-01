@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/utils";
 import { Calendar, Eye, Tag, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -20,7 +21,6 @@ export async function generateMetadata({
     .from("posts")
     .select("title, excerpt")
     .eq("slug", slug)
-    .eq("published", true)
     .single();
 
   if (!post) return { title: "글을 찾을 수 없습니다" };
@@ -38,13 +38,19 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
   const db = getAdminClient();
+  const cookieStore = await cookies();
+  const isAdmin = !!cookieStore.get("admin_token")?.value;
 
-  const { data: post } = await db
+  let query = db
     .from("posts")
     .select("*, category:categories(*)")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
+    .eq("slug", slug);
+
+  if (!isAdmin) {
+    query = query.eq("published", true);
+  }
+
+  const { data: post } = await query.single();
 
   if (!post) notFound();
 
