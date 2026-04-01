@@ -158,7 +158,14 @@ export default function AdminPostsPage() {
                 {filteredPosts.map((post) => (
                   <tr key={post.id} className="border-b border-dark-border/50 hover:bg-dark/30">
                     <td className="px-4 py-3">
-                      <span className="text-sm text-white">{post.title}</span>
+                      <a
+                        href={`/posts/${post.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-white hover:text-gold hover:underline transition cursor-pointer"
+                      >
+                        {post.title}
+                      </a>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
                       <span className="text-xs text-text-muted">
