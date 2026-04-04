@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   },
   description: "안성에서 금, 은, 보석을 가장 정확한 시세로 거래하는 곳. 금 시세, 귀금속 지식, 매장 소식을 전합니다.",
   keywords: ["금거래소", "안성", "금시세", "귀금속", "금매입", "금판매"],
+  verification: {
+    google: "0mMuGDrsnkxOshe13r1YMUacHj0uvWrIxTFwrwK789k",
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
