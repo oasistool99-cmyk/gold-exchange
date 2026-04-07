@@ -35,7 +35,7 @@ export default function Header() {
             <span>📍 경기도 안성시 공도읍 진건중길 4</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>⏰ 평일 10:30~19:30 | 토 10:30~19:30</span>
+            <span>⏰ 연중무휴 10:30~19:30</span>
             {isAdmin && (
               <Link
                 href="/admin/posts"
@@ -55,6 +55,9 @@ export default function Header() {
           <img src="/logo.png" alt="한국금거래소" className="h-10 md:h-12" />
           <span className="text-text-muted text-xs">안성공도점</span>
         </Link>
+        <a href="tel:010-2645-3745" className="hidden md:inline text-text-muted text-xs hover:text-gold transition ml-2">
+          📞 010-2645-3745
+        </a>
 
         {/* 데스크탑 네비게이션 */}
         <nav className="hidden md:flex items-center gap-8">
@@ -67,8 +70,11 @@ export default function Header() {
           <Link href="/category/precious-metals" className="text-sm text-text-muted hover:text-gold transition">
             귀금속 지식
           </Link>
-          <Link href="/category/store-news" className="text-sm text-text-muted hover:text-gold transition">
+          <Link href="/progress" className="text-sm text-text-muted hover:text-gold transition">
             매장 소식
+          </Link>
+          <Link href="/directions" className="text-sm text-text-muted hover:text-gold transition">
+            오시는 길
           </Link>
           <button
             onClick={() => setSearchOpen(!searchOpen)}
@@ -141,8 +147,11 @@ export default function Header() {
             <Link href="/category/precious-metals" onClick={() => setMenuOpen(false)} className="text-sm text-text-muted hover:text-gold transition py-2">
               귀금속 지식
             </Link>
-            <Link href="/category/store-news" onClick={() => setMenuOpen(false)} className="text-sm text-text-muted hover:text-gold transition py-2">
+            <Link href="/progress" onClick={() => setMenuOpen(false)} className="text-sm text-text-muted hover:text-gold transition py-2">
               매장 소식
+            </Link>
+            <Link href="/directions" onClick={() => setMenuOpen(false)} className="text-sm text-text-muted hover:text-gold transition py-2">
+              오시는 길
             </Link>
             {isAdmin && (
               <Link href="/admin/posts" onClick={() => setMenuOpen(false)} className="text-sm text-gold hover:text-gold-light transition py-2 border-t border-dark-border pt-3">
