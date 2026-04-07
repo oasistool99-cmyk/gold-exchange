@@ -79,23 +79,13 @@ export default function SettingsPage() {
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white text-xs font-bold">T</div>
               <h2 className="text-base font-semibold text-white">Tistory</h2>
-              {tistoryToken && tistoryBlog && (
+              {tistoryBlog && (
                 <span className="text-[11px] text-green-400 bg-green-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
                   <CheckCircle size={10} /> 연동됨
                 </span>
               )}
             </div>
             <div className="space-y-3">
-              <div>
-                <label className="block text-xs text-text-muted mb-1">Access Token</label>
-                <input
-                  type="password"
-                  value={tistoryToken}
-                  onChange={(e) => setTistoryToken(e.target.value)}
-                  placeholder="Tistory Open API Access Token"
-                  className="w-full bg-dark border border-dark-border rounded-lg px-3 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-gold"
-                />
-              </div>
               <div>
                 <label className="block text-xs text-text-muted mb-1">블로그 이름</label>
                 <input
@@ -106,13 +96,25 @@ export default function SettingsPage() {
                   className="w-full bg-dark border border-dark-border rounded-lg px-3 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-gold"
                 />
               </div>
+              <div className="bg-dark rounded-lg p-3 border border-dark-border">
+                <p className="text-xs text-text-muted mb-2">
+                  Tistory Open API가 종료되어 <strong className="text-text">Puppeteer 자동화</strong> 방식으로 발행합니다.
+                </p>
+                <p className="text-xs text-text-muted mb-1">터미널에서 아래 명령어로 실행:</p>
+                <code className="block text-xs text-gold bg-dark-card px-2 py-1.5 rounded mt-1">
+                  node scripts/publish-to-tistory.js
+                </code>
+                <p className="text-[11px] text-text-muted mt-2">
+                  * .env.local에 TISTORY_ID, TISTORY_PW 설정 필요
+                </p>
+              </div>
               <a
-                href="https://www.tistory.com/guide/api/manage/register"
+                href={`https://${tistoryBlog || "creator92113"}.tistory.com`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-xs text-gold hover:underline"
               >
-                <ExternalLink size={11} /> Tistory API 앱 등록하기
+                <ExternalLink size={11} /> 블로그 바로가기
               </a>
             </div>
           </div>
