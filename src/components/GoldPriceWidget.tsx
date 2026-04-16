@@ -9,17 +9,24 @@ export default function GoldPriceWidget() {
   const [loading, setLoading] = useState(true);
   const [updatedAt, setUpdatedAt] = useState("");
 
+  function nowKST() {
+    const days = ["일", "월", "화", "수", "목", "금", "토"];
+    const n = new Date();
+    const pad = (v: number) => String(v).padStart(2, "0");
+    return `${n.getFullYear()}.${pad(n.getMonth() + 1)}.${pad(n.getDate())} (${days[n.getDay()]}) ${pad(n.getHours())}:${pad(n.getMinutes())}`;
+  }
+
   async function fetchPrices() {
     try {
       const res = await fetch("/api/gold-price");
       const data = await res.json();
       if (data.prices && data.prices.length > 0) {
         setPrices(data.prices);
-        setUpdatedAt(data.updatedAt || "");
       }
     } catch {
       // ignore
     } finally {
+      setUpdatedAt(nowKST());
       setLoading(false);
     }
   }
