@@ -103,7 +103,11 @@ export async function GET() {
     return NextResponse.json(cachedData);
   }
 
-  // 최종 fallback
+  // 최종 fallback (현재 시간 표시)
+  const now = new Date();
+  const kstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  const fallbackTime = `${kstNow.getUTCFullYear()}.${String(kstNow.getUTCMonth() + 1).padStart(2, "0")}.${String(kstNow.getUTCDate()).padStart(2, "0")} ${String(kstNow.getUTCHours()).padStart(2, "0")}:${String(kstNow.getUTCMinutes()).padStart(2, "0")} (지연)`;
+
   return NextResponse.json({
     prices: [
       { name: "순금 (24K)", buy: 984000, sell: 826000, change: 16000 },
@@ -112,6 +116,6 @@ export async function GET() {
       { name: "백금 (Pt)", buy: 413000, sell: 336000, change: 4000 },
       { name: "은 (Ag)", buy: 15500, sell: 12460, change: 560 },
     ],
-    updatedAt: "최근 시세 (업데이트 지연)",
+    updatedAt: fallbackTime,
   });
 }

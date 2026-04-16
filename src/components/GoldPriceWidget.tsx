@@ -99,7 +99,7 @@ export default function GoldPriceWidget() {
 
       {updatedAt && (
         <p className="text-[10px] text-text-muted mt-2 text-right">
-          {updatedAt}
+          <span className="text-gold/70">업데이트:</span> {updatedAt}
         </p>
       )}
       <p className="text-[10px] text-text-muted mt-0.5">
